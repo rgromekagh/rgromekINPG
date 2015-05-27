@@ -1,0 +1,65 @@
+// Sortowanie Kube³kowe
+//--------------------------------------------------------
+// (C)2012 I LO w Tarnowie
+// I Liceum Ogólnokszta³c¹ce
+// im. K. Brodziñskiego
+// w Tarnowie
+//--------------------------------------------------------
+
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <time.h>
+
+using namespace std;
+
+int main()
+{
+  const int WMIN = -99;
+  const int WMAX = 99;
+  const int N = 80;
+  int d[N],lw[WMAX - WMIN + 1],i,j;
+
+  cout << " Sortowanie kubelkowe \n"
+          "----------------------\n"
+          "(C)2005 Jerzy Walaszek\n\n";
+
+// tworzymy zbiór wejœciowy do sortowania
+
+  srand((unsigned)time(NULL));
+
+  for(i = 0; i < N; i++) d[i] = WMIN + rand() % (WMAX - WMIN + 1);
+
+// wyœwietlamy zawartoœæ zbioru przed sortowaniem
+
+  cout << "Przed sortowaniem:\n\n";
+  for(i = 0; i < N; i++) cout << setw(4) << d[i];
+  cout << endl;
+
+// sortujemy
+
+// najpierw zerujemy liczniki
+
+  for(i = WMIN; i <= WMAX; i++) lw[i - WMIN] = 0;
+
+// zliczamy w odpowiednich licznikach wyst¹pienia
+// wartoœci elementów sortowanego zbioru
+
+  for(i = 0; i < N; i++) lw[d[i] - WMIN]++;
+
+// zapisujemy do zbioru wynikowego numery niezerowych liczników
+// tyle razy, ile wynosi ich zawartoœæ
+
+  j = 0;
+  for(i = WMIN; i <= WMAX; i++) while(lw[i - WMIN]--) d[j++] = i;
+
+// wyœwietlamy zawartoœæ zbioru po sortowaniu
+
+  cout << "Po sortowaniu:\n\n";
+  for(i = 0; i < N; i++) cout << setw(4) << d[i];
+
+// koniec
+
+  cout << endl;
+  return 0;
+} 
