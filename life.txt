@@ -1,0 +1,110 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include "life.h"
+
+using namespace std;
+
+// konstruktor bezargumentowy (tworzy planszê 10x10)
+CLife::CLife()
+{
+    nr = 0; // ustawia numer pokolenia na 0
+    Nx = 10;
+    Ny = 10;
+    N = Nx*Ny;
+    map = new int[N];   // tworzy tablicê dynamiczn¹ planszy
+    buf = new int[N];   // tworzy tablicê dynamiczn¹ bufora planszy
+}
+
+// konstruktor z argumentami (Nx - ustala liczbê wierszy, Ny - ustala liczbê kolumn)
+CLife::CLife(int Nx, int Ny)
+{
+    nr = 0;
+    this->Nx = Nx;
+    this->Ny = Ny;
+    N = Nx*Ny;
+    map = new int[N];
+    buf = new int[N];
+}
+
+void CLife::Initialize()
+{
+    srand( time( NULL ) );  // inicjalizacja generatora liczb pseudolosowych
+
+    for(i = 0; i < N; i++) *(map+i) = rand()%2; // nadaje wartoœæ 0 (brak ¿ycia) lub 1 (jest ¿ycie) komórkom planszy
+}
+
+// wypisuje planszê w konsoli
+void CLife::Show()
+{
+    cout << endl;
+    cout << "Pokolenie: " << nr << endl;
+    for(y = 0; y < Ny; y++)
+    {
+        for(x = 0; x < Nx; x++)
+        {
+            cout << *(map+y*Ny+x) << " ";
+        }
+        cout << endl;
+    }
+}
+
+// wylicza nowe pokolenie organizmów do *buf, przenosi *buf do *map
+void CLife::Next()
+{
+    for(x = 0; x < Nx; x++)
+      for(y = 0; y < Ny; y++)
+      {
+          nn = 0; // liczba s¹siadów komórki
+
+          // oblicza liczbê s¹siadów komórki [x,y]
+          for(c = -1; c < 2; c++)
+            for(l = -1; l < 2; l++)
+              if(((c != 0) || (l != 0)) && (*(map+Y(y + l)*Ny+X(x + c)) == 1)) nn++;
+
+          // sprawdza regu³y prze¿ycia komórki lub narodzin nowej
+          if(*(map+y*Ny+x) == 1)    // gdy komórka ¿ywa
+          {
+              if((nn == 2) || (nn == 3)) *(buf+y*Ny+x) = 1;
+              else                       *(buf+y*Ny+x) = 0;
+          }
+          else  // gdy komórka martwa
+          {
+              if(nn == 3) *(buf+y*Ny+x) = 1;
+              else        *(buf+y*Ny+x) = 0;
+          }
+      }
+
+      // przenosimy *buf do *map
+      for(i = 0; i < N; i++) *(map+i) = *(buf+i);
+      nr++; // zwiêksza numer pokolenia o 1
+}
+
+// wylicza wspó³rzêdn¹ x w obrêbie pola gry
+int CLife::X(int x)
+{
+    if(x == Nx) x =  0;
+    if(x <  0) x = Nx-1;
+    return x;
+}
+
+// wylicza wspó³rzêdn¹ y w obrêbie pola gry
+int CLife::Y(int y)
+{
+    if(y == Ny) y =  0;
+    if(y <  0) y = Ny-1;
+    return y;
+}
+
+// ustawia w punkcie [x, y] ¿yw¹ komórkê
+void CLife::Set(int x, int y)
+{
+    *(map+y*Ny+x) = 1;
+}
+
+//zwalnia pamiêæ map oraz buf
+CLife::~CLife()
+{
+    delete [] map;
+    delete [] buf;
+}
