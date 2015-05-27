@@ -1,0 +1,76 @@
+// Przyk³ad zastosowania list
+//--------------------------------------------------------
+// (C)2012 I LO w Tarnowie
+// I Liceum Ogólnokszta³c¹ce
+// im. K. Brodziñskiego
+// w Tarnowie
+//--------------------------------------------------------
+
+#include <iostream>
+#include <cstdlib>
+#include <time.h>
+
+using namespace std;
+
+const int MAXN = 19;
+
+int main()
+{
+  struct
+  {
+    unsigned int nastepnik;
+    char dane[3];
+  } L[MAXN+1];
+  unsigned int ngl[3],i,j;
+
+  cout << "Demonstracja zastosowania list\n"
+          "------------------------------\n"
+          "  (C)2005 mgr Jerzy Walaszek  \n\n"
+          "3-literowe teksty losowe:\n\n";
+
+// Tworzymy losowe ci¹gi 3-literowe w elementach tablicy L[]
+
+  srand((unsigned)time(NULL));
+
+  for(i = 1; i <= MAXN; i++)
+    for(j = 0; j < 3; j++)
+      L[i].dane[j] = 65 + rand() % 3;
+
+// Wyœwietlamy ci¹gi
+
+  for(i = 1; i <= MAXN; i++)
+    cout << " " << L[i].dane[0] << L[i].dane[1] << L[i].dane[2];
+  cout << endl << endl;
+
+// Zerujemy nag³ówki list
+
+  for(i = 0; i < 3; i++) ngl[i] = 0;
+
+// Tworzymy listy wyrazów na A, B i C
+
+  for(i = 1; i <= MAXN; i++)
+  {
+    j = L[i].dane[0] - 65;
+    L[i].nastepnik = ngl[j];
+    ngl[j] = i;
+  }
+
+// Odczytujemy kolejne listy i wyœwietlamy je w oknie konsoli
+
+  for(i = 0; i < 3; i++)
+  {
+    cout << "Na litere " << (char)(i + 65) << " :";
+    j = ngl[i];
+    while(j)
+    {
+      cout << " " << L[j].dane[0] << L[j].dane[1] << L[j].dane[2];
+      j = L[j].nastepnik;
+    }
+    cout << endl << endl;
+  }
+
+// Gotowe, koñczymy program
+
+  cout << endl;
+  return 0;
+} 
