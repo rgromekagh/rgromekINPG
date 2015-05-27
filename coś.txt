@@ -1,0 +1,77 @@
+// Rozbiór kopca
+//--------------------------------------------------------
+// (C)2012 I LO w Tarnowie
+// I Liceum Ogólnokszta³c¹ce
+// im. K. Brodziñskiego
+// w Tarnowie
+//--------------------------------------------------------
+
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <time.h>
+
+using namespace std;
+
+int main()
+{
+  const int N = 15; // liczba elementów
+  int d[N + 1],i,j,k,m,x;
+
+  srand((unsigned)time(NULL));
+
+  cout << "    Rozbior  kopca\n"
+          "----------------------\n"
+          "(C)2005 Jerzy Walaszek\n\n"
+          "Zbior wejsciowy ze struktura kopca:\n\n";
+
+// W zbiorze d konstruujemy kopiec
+
+   d[1] = 9;
+   for(i = 2; i <= N; i++) d[i] = rand() % (d[i / 2] + 1);
+
+// Prezentujemy kopiec
+
+  for(i = 1; i <= N; i++) cout << setw(2) << d[i];
+  cout << endl << endl;
+  x = (N + 1) / 2; k = 2;
+  for(i = 1; i <= N; i++)
+  {
+    for(j = 1; j < x; j++) cout << " ";
+    cout << d[i];
+    for(j = 1; j <= x; j++) cout << " ";
+    if(i + 1 == k)
+    {
+      k += k; x /= 2; cout << endl;
+    }
+  }
+
+// Rozbieramy kopiec
+
+  for(i = N; i > 1; i--)
+  {
+    swap(d[1], d[i]);
+    j = 1; k = 2;
+    while(k < i)
+    {
+      if((k + 1 < i) && (d[k + 1] > d[k]))
+        m = k + 1;
+      else
+        m = k;
+      if(d[m] <= d[j]) break;
+      swap(d[j], d[m]);
+      j = m; k = j + j;
+    }
+  }
+
+// Wyœwietlamy wynik rozbioru kopca
+
+  cout << endl << "Zbior wyjsciowy po rozbiorze kopca:\n\n";
+  
+  for(i = 1; i <= N; i++) cout << setw(2) << d[i];
+  cout << endl << endl;
+
+// Gotowe
+
+  return 0;
+} 
